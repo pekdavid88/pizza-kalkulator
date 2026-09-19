@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NY Pizza Tésztakalkulátor</title>
+  <title>NY Pizza Tésztakalkulátor - Hosszú Sütési Ablak</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -105,7 +105,7 @@
       border-radius: 6px;
       font-size: 0.85rem;
       margin-bottom: 24px;
-      line-height: 1.4;
+      line-height: 1.45;
       color: var(--text-muted);
     }
 
@@ -159,7 +159,7 @@
 
   <div class="container">
     <h1>NY Pizza Kalkulátor</h1>
-    <p class="subtitle">Dinamikus fermentációs receptúra New York stílushoz</p>
+    <p class="subtitle">Magas stabilitású receptúra hosszú szobahőmérsékletű tartáshoz</p>
 
     <!-- Pizzák darabszáma -->
     <div class="form-group">
@@ -224,49 +224,53 @@
     };
 
     function calculateParameters(hours) {
-      let yeastPct = 0.3;
-      let sugarPct = 1.5;
-      let hydration = 63.0;
+      let yeastPct = 0.10;
+      let sugarPct = 1.0;
+      let hydration = 60.0;
+      let saltPct = 3.0;
+      let oilPct = 2.5;
       let tempDesc = "";
       let methodDesc = "";
 
       if (hours <= 4) {
-        // Expressz kelesztés szobahőmérsékleten
-        yeastPct = 1.3 - (hours - 2) * 0.25; // 2h: 1.3%, 3h: 1.05%, 4h: 0.8%
-        sugarPct = 2.0;
-        hydration = 62.0; // Picit zártabb, hogy a rövid sikér ne folyjon szét
-        tempDesc = "Kézmeleg víz (32–35 °C)";
-        methodDesc = "<strong>Szobahőmérsékletű gyorsérlelés:</strong> Meleg vizet használj. Dagasztás után 15 perc pihentetés, majd azonnali gombócozás és szobahőn (22–25 °C) kelesztés sütésig.";
-      } else if (hours <= 8) {
-        // Ugyancsak szobahő, de kényelmesebb
-        yeastPct = 0.7 - (hours - 4) * 0.08; // ~0.7% -> ~0.38%
+        // Expressz kelesztés szobahőn
+        yeastPct = 1.2 - (hours - 2) * 0.25;
         sugarPct = 1.8;
-        hydration = 62.5;
-        tempDesc = "Szobahőmérsékletű víz (20–22 °C)";
-        methodDesc = "<strong>Napközbeni szobahőmérsékletű kelesztés:</strong> 1-2 óra bulk kelesztés után gombócozd ki, és lefedve tartsd szobahőn a sütés pillanatáig.";
-      } else if (hours <= 24) {
-        // Klasszikus 12-24 órás hűtős fermentáció
-        // 12h: ~0.45%, 24h: 0.30%
-        yeastPct = 0.45 - ((hours - 12) / 12) * 0.15;
+        hydration = 61.0;
+        saltPct = 2.6;
+        tempDesc = "Kézmeleg víz (30–34 °C)";
+        methodDesc = "<strong>Szobahőmérsékletű gyorsérlelés:</strong> Meleg vizet használj. Dagasztás után 15 perc pihentetés, majd gombócozás és szobahőn (22–24 °C) kelesztés sütésig.";
+      } else if (hours <= 8) {
+        // Napközbeni szobahő
+        yeastPct = 0.45 - (hours - 4) * 0.06;
         sugarPct = 1.5;
-        hydration = 63.0;
-        tempDesc = "Hideg víz (10–14 °C)";
-        methodDesc = "<strong>Hideg érlelés (hűtőben 4 °C-on):</strong> Dagasztás után 30–45 perc szobahőn (bulk), gombócozás, majd hűtő. <em>Fontos: Sütés előtt 2 órával vedd ki szobahőre temperálódni!</em>";
+        hydration = 60.5;
+        saltPct = 2.8;
+        tempDesc = "Szobahőmérsékletű víz (18–20 °C)";
+        methodDesc = "<strong>Napközbeni kelesztés:</strong> 1-2 óra bulk kelesztés után gombócozd feszesre, majd lefedett kelesztődobozban tartsd szobahőn.";
+      } else if (hours <= 28) {
+        // 24 órás hűtős fermentáció – 6 órás szobahőn tartható stabilitásra hangolva
+        yeastPct = 0.10;
+        sugarPct = 1.0;
+        hydration = 60.0;
+        saltPct = 3.0;
+        tempDesc = "Jéghideg víz (4–8 °C)";
+        methodDesc = "<strong>24 órás hideg fermentáció (fokozott stabilitás):</strong> Dagasztás után mindössze 15–20 percet hagyd szobahőn, majd egyben (bulk) tedd a hűtőbe (3–4 °C). <em>Sütés előtt 1,5–2 órával gombócozd feszesre! A feszes gömbölyítés, a 60% hidratáció és a 3% só révén a tészta a kivételtől számítva 2–6 órán át sütéskész állapotban marad lefedve.</em>";
       } else {
-        // Hosszú 24-72 órás hideg fermentáció
-        // 24h: 0.30%, 72h: 0.15%
-        yeastPct = 0.30 - ((hours - 24) / 48) * 0.15;
-        sugarPct = 1.2 - ((hours - 24) / 48) * 0.2; // A hosszas enzimaktivitás miatt kevesebb hozzáadott cukor is elég
-        hydration = 63.5;
-        tempDesc = "Nagyon hideg víz (4–8 °C)";
-        methodDesc = "<strong>Hosszú hideg érlelés (hűtőben 3–4 °C-on):</strong> Minimális élesztő, lassú enzimatikus cukorbontás és erős gluténstruktúra. <em>Sütés előtt 2,5–3 órával temperáld!</em>";
+        // Hosszú 28-72 órás hideg fermentáció
+        yeastPct = 0.08 - ((hours - 28) / 44) * 0.03; // ~0.08% -> 0.05%
+        sugarPct = 0.8;
+        hydration = 60.0;
+        saltPct = 3.0;
+        tempDesc = "Jéghideg víz (3–5 °C)";
+        methodDesc = "<strong>Hosszú hideg érlelés (3–4 °C):</strong> Lassú enzimatikus cukorbontás és masszív sikérszerkezet. A tésztát bulk formában hűtsd, majd a sütés előtt 2 órával feszesen gombócozd ki.";
       }
 
       return {
         flour: 100.0,
         water: hydration,
-        salt: 2.5,
-        oil: 2.5,
+        salt: saltPct,
+        oil: oilPct,
         sugar: Math.round(sugarPct * 100) / 100,
         yeast: Math.round(yeastPct * 1000) / 1000,
         tempDesc,
@@ -285,9 +289,9 @@
       displays.time.textContent = `${hours} óra`;
 
       const params = calculateParameters(hours);
-      displays.notes.innerHTML = `${params.methodDesc}<br><span style="display:inline-block; margin-top:6px; color:#cbd5e1;">💧 <strong>Ajánlott vízhőmérséklet:</strong> ${params.tempDesc}</span>`;
+      displays.notes.innerHTML = `${params.methodDesc}<br><span style="display:inline-block; margin-top:8px; color:#cbd5e1;">💧 <strong>Ajánlott vízhőmérséklet:</strong> ${params.tempDesc}</span>`;
 
-      // Százalékok összege
+      // Százalékok összege és liszttömeg számítása
       const totalPct = params.flour + params.water + params.salt + params.oil + params.sugar + params.yeast;
       const targetBatchWeight = count * ballWeight;
       const flourWeight = targetBatchWeight / (totalPct / 100);
@@ -307,11 +311,14 @@
       ingredients.forEach(item => {
         calculatedTotalWeight += item.weight;
         const tr = document.createElement("tr");
-        
-        // Formázási logika: 10g alatt 1 tizedesjegy a pontosságért (só, élesztő)
-        const formattedWeight = item.weight < 15 
-          ? item.weight.toFixed(1) + " g" 
-          : Math.round(item.weight) + " g";
+
+        // Formázás: 5g alatti értékekre 2 tizedesjegy (precíz élesztő méréshez), 15g alatt 1 tizedesjegy, felette kerekítés
+        let formattedWeight = Math.round(item.weight) + " g";
+        if (item.weight < 5) {
+          formattedWeight = item.weight.toFixed(2) + " g";
+        } else if (item.weight < 15) {
+          formattedWeight = item.weight.toFixed(1) + " g";
+        }
 
         tr.innerHTML = `
           <td>${item.name}</td>
