@@ -224,10 +224,10 @@
     };
 
     function calculateParameters(hours) {
-      let yeastPct = 0.10;
+      let yeastPct = 0.12;
       let sugarPct = 1.0;
       let hydration = 60.0;
-      let saltPct = 3.0;
+      let saltPct = 2.9;
       let oilPct = 2.5;
       let tempDesc = "";
       let methodDesc = "";
@@ -249,16 +249,16 @@
         tempDesc = "Szobahőmérsékletű víz (18–20 °C)";
         methodDesc = "<strong>Napközbeni kelesztés:</strong> 1-2 óra bulk kelesztés után gombócozd feszesre, majd lefedett kelesztődobozban tartsd szobahőn.";
       } else if (hours <= 28) {
-        // 24 órás hűtős fermentáció – 6 órás szobahőn tartható stabilitásra hangolva
-        yeastPct = 0.10;
+        // 24 órás hűtős fermentáció – 16:00/17:00 és 20:00 közötti sütési ablakra optimalizálva
+        yeastPct = 0.12;
         sugarPct = 1.0;
         hydration = 60.0;
-        saltPct = 3.0;
+        saltPct = 2.9;
         tempDesc = "Jéghideg víz (4–8 °C)";
-        methodDesc = "<strong>24 órás hideg fermentáció (fokozott stabilitás):</strong> Dagasztás után mindössze 15–20 percet hagyd szobahőn, majd egyben (bulk) tedd a hűtőbe (3–4 °C). <em>Sütés előtt 1,5–2 órával gombócozd feszesre! A feszes gömbölyítés, a 60% hidratáció és a 3% só révén a tészta a kivételtől számítva 2–6 órán át sütéskész állapotban marad lefedve.</em>";
+        methodDesc = "<strong>24 órás hideg fermentáció (5 órás pult-stabilitás):</strong> Dagasztás után 15 perc pihentetés, majd mehet egyben (bulk) a hűtőbe (3–4 °C). <em>A sütés előtt 1,5–2 órával (kb. 14:30–15:00 körül) egyszerre gombócozd ki az összes bucit nagyon feszesre. Zárt dobozban tartva a tészta 16:30-tól egészen 20:00-ig süthető és feszes marad anélkül, hogy szakaszosan kellene hűteni.</em>";
       } else {
         // Hosszú 28-72 órás hideg fermentáció
-        yeastPct = 0.08 - ((hours - 28) / 44) * 0.03; // ~0.08% -> 0.05%
+        yeastPct = 0.08 - ((hours - 28) / 44) * 0.03;
         sugarPct = 0.8;
         hydration = 60.0;
         saltPct = 3.0;
@@ -312,7 +312,7 @@
         calculatedTotalWeight += item.weight;
         const tr = document.createElement("tr");
 
-        // Formázás: 5g alatti értékekre 2 tizedesjegy (precíz élesztő méréshez), 15g alatt 1 tizedesjegy, felette kerekítés
+        // Formázás: 5g alatt 2 tizedesjegy (precíz élesztő méréshez), 15g alatt 1 tizedesjegy, felette kerekítés
         let formattedWeight = Math.round(item.weight) + " g";
         if (item.weight < 5) {
           formattedWeight = item.weight.toFixed(2) + " g";
